@@ -1,8 +1,7 @@
-import React from "react";
-import "./App.css";
+import React, { Component } from "react";
 
-function App() {
-  return <div className="App">start</div>;
+export default class App extends Component {
+  render() {
+    return <div>start</div>;
+  }
 }
-
-export default App;

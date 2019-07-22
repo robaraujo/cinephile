@@ -10,6 +10,7 @@
 /api/Homestead.yaml
 /api/npm-debug.log
 /api/yarn-error.log
+/api/storage/*
 
 # client ignores
 /client/node_modules
