@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/movie/{id}', 'MovieController@load');
+Route::get('/movies-page/{page}', 'MovieController@paginate');
+Route::get('/movies-search/{query}', 'MovieController@search');
