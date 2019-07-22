@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         
         Tmdb\Laravel\TmdbServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*
