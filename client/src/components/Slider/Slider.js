@@ -8,6 +8,7 @@ const styles = theme => ({
     cursor: "normal",
     paddingBottom: theme.spacing(1),
     height: "39vw !important",
+    maxHeight: 495,
     position: "relative"
   },
   img: {

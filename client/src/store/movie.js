@@ -184,7 +184,7 @@ export function search(text) {
     axios.get("/movies-search/" + text).then(
       res => {
         // no results found
-        if (!res.data.length) {
+        if (!res.data.results.length) {
           return dispatch({
             type: Types.SEARCH_FAILURE,
             payload: "no movies found"
@@ -193,7 +193,7 @@ export function search(text) {
 
         dispatch({
           type: Types.SEARCH_SUCCESS,
-          payload: res.data
+          payload: res.data.results
         });
       },
       err => {
