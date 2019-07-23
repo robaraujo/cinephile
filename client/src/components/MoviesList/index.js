@@ -21,7 +21,6 @@ const styles = theme => ({
 
 class MoviesList extends Component {
   componentDidMount() {
-    this.props.onPaginate();
     this.initInfiniteScroll();
   }
 
