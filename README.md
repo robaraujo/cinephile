@@ -10,4 +10,10 @@ Folder: /client
 Api create with Laravel framework, using Guzzle and Guzzle Cache to interact with TMDB API.
 Folder: /api
 
-A separação dos projetos em pastas diferentes foi feita para facilitar o trabalho de equipes separadas de frontend e backend.
+## Consideration
+Projects are separated into different folders to make it easier for separate frontend and backend teams to work. 
+
+## Test
+The tests were not implemented for lack of time, but were planned with jest and enzyme for the frontend and PHPUnit for the backend.
+
+Demo: http://3.218.53.101/
