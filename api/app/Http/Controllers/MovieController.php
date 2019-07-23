@@ -26,6 +26,12 @@ class MovieController extends Controller
         return $this->prepareMovies($response)['results'];
     }
 
+    /**
+     * Return details from a specific movie
+     * @param int $id
+     *
+     * @return array
+     */
     public function load($id)
     {
         $movie = Tmdb::getMoviesApi()->getMovie($id);
@@ -74,6 +80,7 @@ class MovieController extends Controller
         $movie['backdrop_path'] = !$movie['backdrop_path'] ? url('images/no-img-backdrop.jpg')
         : "https://image.tmdb.org/t/p/w500/{$movie['backdrop_path']}";
 
+        // convert genres to string and separete first one
         if (isset($movie['genres']) && count($movie['genres'])) {
             $movie['genres_string'] = implode(', ', array_column($movie['genres'], 'name'));
             $movie['first_genre'] = $movie['genres'][0]['name'];
