@@ -2,8 +2,8 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // Views
-import Home from "./pages/Home/Home";
-import MovieDetail from "./pages/MovieDetails/MovieDetail";
+import Home from "./pages/Home";
+import MovieDetail from "./pages/MovieDetails";
 
 const Routes = props => (
   <Switch>
