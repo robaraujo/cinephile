@@ -13,7 +13,7 @@ const reducers = {
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["movieReducer"]
+  whitelist: [] // not using redux-persist yet
 };
 const persistedReducer = persistCombineReducers(persistConfig, reducers);
 
