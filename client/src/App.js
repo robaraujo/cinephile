@@ -5,12 +5,13 @@ import { PersistGate } from "redux-persist/integration/react";
 import { createBrowserHistory } from "history";
 import { ThemeProvider } from "@material-ui/styles";
 import axios from "axios";
+import config from "./config";
 
 import theme from "./theme";
 import Routes from "./Routes";
 import configureStore from "./store/configStore";
 
-axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
+axios.defaults.baseURL = config.api;
 const { store, persistor } = configureStore();
 const browserHistory = createBrowserHistory();
 
