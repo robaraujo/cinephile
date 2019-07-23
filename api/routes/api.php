@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/movie/{id}', 'MovieController@load');
 Route::get('/movies-page/{page}', 'MovieController@paginate');
-Route::get('/movies-search/{query}', 'MovieController@search');
+Route::get('/movies-search/{query}/{page?}', 'MovieController@search');
