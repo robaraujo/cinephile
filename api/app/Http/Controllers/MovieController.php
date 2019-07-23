@@ -40,8 +40,9 @@ class MovieController extends Controller
      */
     private function prepareMovies($response)
     {
+        $genres = Tmdb::getGenresApi()->getGenres()['genres'];
         foreach ($response['results'] as &$movie) {
-            $movie = $this->prepareMovie($movie);
+            $movie = $this->prepareMovie($movie, $genres);
         }
         return $response;
     }
@@ -52,8 +53,20 @@ class MovieController extends Controller
      *
      * @return array
      */
-    private function prepareMovie($movie)
+    private function prepareMovie($movie, $genres = null)
     {
+        // normalize genres, in some endpoints only return genre_ids
+        if ($genres && isset($movie['genre_ids'])) {
+            $movie['genres'] = [];
+            $ids = array_column($genres, "id");
+
+            foreach ($movie['genre_ids'] as $id) {
+                if ($index = array_search($id, $ids)) {
+                    $movie['genres'][] = $genres[$index];
+                }
+            }
+        }
+
         // add full path image or if has no img, set a default one
         $movie['poster_path'] = !$movie['poster_path'] ? url('images/no-img-poster.jpg')
         : "https://image.tmdb.org/t/p/w500/{$movie['poster_path']}";
@@ -61,8 +74,9 @@ class MovieController extends Controller
         $movie['backdrop_path'] = !$movie['backdrop_path'] ? url('images/no-img-backdrop.jpg')
         : "https://image.tmdb.org/t/p/w500/{$movie['backdrop_path']}";
 
-        if (isset($movie['genres'])) {
+        if (isset($movie['genres']) && count($movie['genres'])) {
             $movie['genres_string'] = implode(', ', array_column($movie['genres'], 'name'));
+            $movie['first_genre'] = $movie['genres'][0]['name'];
         }
 
         return $movie;
