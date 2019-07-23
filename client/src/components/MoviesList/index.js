@@ -54,7 +54,11 @@ class MoviesList extends Component {
             <Typography variant="caption" className={classes.loadingText}>
               loading movies
             </Typography>
-            <CircularProgress size={33} className={classes.loadingProgress} />
+            <CircularProgress
+              size={33}
+              className={classes.loadingProgress}
+              color="secondary"
+            />
           </div>
         )}
       </Grid>
