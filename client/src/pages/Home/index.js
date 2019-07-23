@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { MoviesList, Slider } from "../../components";
+import { MoviesList, Slider, LoadingGlobal } from "../../components";
 import MainLayout from "../../layouts/Main";
 import { paginate } from "../../store/movie";
 
 class Home extends Component {
+  componentDidMount() {
+    this.props.onPaginate();
+  }
+
   render() {
     const { paginate, onPaginate } = this.props;
+
+    if (!paginate.list.length) {
+      return <LoadingGlobal />;
+    }
 
     return (
       <MainLayout>
