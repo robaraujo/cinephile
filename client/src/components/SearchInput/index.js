@@ -17,6 +17,11 @@ const styles = theme => ({
       width: "100%"
     }
   },
+  error: {
+    padding: 10,
+    background: "#fff",
+    color: "#000"
+  },
   suggestions: {
     top: 16,
     cursor: "pointer",
@@ -77,7 +82,9 @@ const styles = theme => ({
 
 class SearchInput extends Component {
   changeSearch = debounce(value => {
-    this.props.onSearch(value);
+    if (value) {
+      this.props.onSearch(value);
+    }
   }, 500);
 
   input = (getInputProps, classes) => (
@@ -116,16 +123,10 @@ class SearchInput extends Component {
   );
 
   render() {
-    const { classes, list } = this.props;
+    const { classes, list, loading, error } = this.props;
+    console.log(error);
     return (
-      <Downshift
-        onChange={selection => {
-          if (selection) {
-            alert(selection);
-          }
-        }}
-        itemToString={item => (item ? item.value : "")}
-      >
+      <Downshift itemToString={item => (item ? item.value : "")}>
         {({
           getInputProps,
           getItemProps,
@@ -137,24 +138,28 @@ class SearchInput extends Component {
           <div className={classes.root}>
             {this.input(getInputProps, classes)}
             <ul {...getMenuProps({ className: classes.suggestions })}>
-              {isOpen
-                ? list.map((movie, index) => (
-                    <li
-                      {...getItemProps({
-                        key: movie.id,
-                        index,
-                        item: movie,
-                        style: {
-                          backgroundColor:
-                            highlightedIndex === index ? "lightgray" : "white",
-                          fontWeight: selectedItem === movie ? "bold" : "normal"
-                        }
-                      })}
-                    >
-                      {this.item(movie, classes)}
-                    </li>
-                  ))
-                : null}
+              {isOpen &&
+                list.map((movie, index) => (
+                  <li
+                    {...getItemProps({
+                      key: movie.id,
+                      index,
+                      item: movie,
+                      style: {
+                        backgroundColor:
+                          highlightedIndex === index ? "lightgray" : "white",
+                        fontWeight: selectedItem === movie ? "bold" : "normal"
+                      }
+                    })}
+                  >
+                    {this.item(movie, classes)}
+                  </li>
+                ))}
+              {isOpen && !list.length && !loading && error && (
+                <Typography variant="body1" className={classes.error}>
+                  {error}
+                </Typography>
+              )}
             </ul>
           </div>
         )}
