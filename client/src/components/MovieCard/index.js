@@ -31,6 +31,16 @@ const styles = theme => ({
   posterImg: {
     width: "100%",
     minHeight: "264px"
+  },
+  genres: {
+    display: "inline-block",
+    borderRadius: 2,
+    background: "#fbc40e",
+    padding: "3px 5px",
+    position: "absolute",
+    top: 10,
+    right: -4,
+    zIndex: 2
   }
 });
 
@@ -40,6 +50,11 @@ const MovieCard = props => {
   return (
     <Link to={"/movie/" + movie.id} className={classes.movieCard}>
       <div className={classes.poster}>
+        {movie.first_genre && (
+          <Typography variant="body2" className={classes.genres}>
+            {movie.first_genre}
+          </Typography>
+        )}
         <div className={classes.overlay} />
         <PosterImg className={classes.posterImg} src={movie.poster_path} />
       </div>
