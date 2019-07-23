@@ -20,7 +20,6 @@ class MainLayout extends Component {
 
 const mapStateToProps = ({ movie }) => {
   return {
-    paginate: movie.paginate,
     search: movie.search
   };
 };
