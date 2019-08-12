@@ -11,9 +11,11 @@
         "php": "^7.1.3",
         "barryvdh/laravel-cors": "^0.11.3",
         "fideloper/proxy": "^4.0",
+        "kevinrob/guzzle-cache-middleware": "^3.2",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "php-tmdb/laravel": "^1.1"
+        "symfony/cache": "^4.3",
+        "symfony/psr-http-message-bridge": "^1.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
