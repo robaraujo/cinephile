@@ -1,19 +1,19 @@
-import { createStore, compose, applyMiddleware } from "redux";
-import { persistStore, persistCombineReducers } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import thunk from "redux-thunk";
+import { createStore, compose, applyMiddleware } from 'redux';
+import { persistStore, persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import thunk from 'redux-thunk';
 
-import movieReducer from "./movie";
+import movieReducer from './movie';
 
 const reducers = {
-  movie: movieReducer
+  movie: movieReducer,
 };
 
 // Persistor Configuration to whitelist movies
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  whitelist: [] // not using redux-persist yet
+  whitelist: [],
 };
 const persistedReducer = persistCombineReducers(persistConfig, reducers);
 

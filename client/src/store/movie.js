@@ -1,16 +1,17 @@
-import axios from "axios";
+/* eslint-disable camelcase */
+import axios from 'axios';
 
 // Action Types
 export const Types = {
-  GET_REQUEST: "movie/GET_REQUEST",
-  GET_SUCCESS: "movie/GET_SUCCESS",
-  GET_FAILURE: "movie/GET_FAILURE",
-  PAGINATE_REQUEST: "movie/PAGINATE_REQUEST",
-  PAGINATE_SUCCESS: "movie/PAGINATE_SUCCESS",
-  PAGINATE_FAILURE: "movie/PAGINATE_FAILURE",
-  SEARCH_REQUEST: "movie/SEARCH_REQUEST",
-  SEARCH_SUCCESS: "movie/SEARCH_SUCCESS",
-  SEARCH_FAILURE: "movie/SEARCH_FAILURE"
+  GET_REQUEST: 'movie/GET_REQUEST',
+  GET_SUCCESS: 'movie/GET_SUCCESS',
+  GET_FAILURE: 'movie/GET_FAILURE',
+  PAGINATE_REQUEST: 'movie/PAGINATE_REQUEST',
+  PAGINATE_SUCCESS: 'movie/PAGINATE_SUCCESS',
+  PAGINATE_FAILURE: 'movie/PAGINATE_FAILURE',
+  SEARCH_REQUEST: 'movie/SEARCH_REQUEST',
+  SEARCH_SUCCESS: 'movie/SEARCH_SUCCESS',
+  SEARCH_FAILURE: 'movie/SEARCH_FAILURE',
 };
 
 // Reducer
@@ -18,19 +19,19 @@ const initialState = {
   actual: {
     movie: null,
     loading: false,
-    error: null
+    error: null,
   },
-  paginate: {
+  pagination: {
     list: [],
     page: 0,
     totalPages: null,
-    loading: null
+    loading: false,
   },
   search: {
     list: [],
     loading: false,
-    error: null
-  }
+    error: '',
+  },
 };
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -40,8 +41,8 @@ export default function reducer(state = initialState, action) {
         actual: {
           movie: null,
           loading: true,
-          error: null
-        }
+          error: null,
+        },
       };
     case Types.GET_SUCCESS:
       return {
@@ -49,8 +50,8 @@ export default function reducer(state = initialState, action) {
         actual: {
           movie: action.payload,
           loading: false,
-          error: null
-        }
+          error: null,
+        },
       };
     case Types.GET_FAILURE:
       return {
@@ -58,40 +59,41 @@ export default function reducer(state = initialState, action) {
         actual: {
           movie: null,
           loading: false,
-          error: action.payload
-        }
+          error: action.payload,
+        },
       };
     case Types.PAGINATE_REQUEST:
       return {
         ...state,
-        paginate: {
-          ...state.paginate,
+        pagination: {
+          ...state.pagination,
           loading: true,
-          error: null
-        }
+          error: null,
+        },
       };
-    case Types.PAGINATE_SUCCESS:
+    case Types.PAGINATE_SUCCESS: {
       const { results, page, total_pages } = action.payload;
-      const list = page === 1 ? results : state.paginate.list.concat(results);
+      const list = page === 1 ? results : state.pagination.list.concat(results);
 
       return {
         ...state,
-        paginate: {
+        pagination: {
           page,
           list,
           loading: false,
           error: null,
-          totalPages: total_pages
-        }
+          totalPages: total_pages,
+        },
       };
+    }
     case Types.PAGINATE_FAILURE:
       return {
         ...state,
-        paginate: {
-          ...state.paginate,
+        pagination: {
+          ...state.pagination,
           loading: false,
-          error: action.payload
-        }
+          error: action.payload,
+        },
       };
     case Types.SEARCH_REQUEST:
       return {
@@ -99,8 +101,8 @@ export default function reducer(state = initialState, action) {
         search: {
           list: [],
           loading: true,
-          error: null
-        }
+          error: null,
+        },
       };
     case Types.SEARCH_SUCCESS:
       return {
@@ -108,8 +110,8 @@ export default function reducer(state = initialState, action) {
         search: {
           list: action.payload,
           loading: false,
-          error: null
-        }
+          error: null,
+        },
       };
     case Types.SEARCH_FAILURE:
       return {
@@ -117,8 +119,8 @@ export default function reducer(state = initialState, action) {
         search: {
           list: [],
           loading: false,
-          error: action.payload
-        }
+          error: action.payload,
+        },
       };
     default:
       return state;
@@ -131,21 +133,21 @@ export default function reducer(state = initialState, action) {
  * Get all emails validate from this user
  */
 export function get(id) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: Types.GET_REQUEST });
-    axios.get("/movie/" + id).then(
-      res => {
+    axios.get(`/movie/${id}`).then(
+      (res) => {
         dispatch({
           type: Types.GET_SUCCESS,
-          payload: res.data
+          payload: res.data,
         });
       },
-      err => {
+      (err) => {
         dispatch({
           type: Types.GET_FAILURE,
-          payload: (err.response && err.response.data.error) || "Server error"
+          payload: (err.response && err.response.data.error) || 'Server error',
         });
-      }
+      },
     );
   };
 }
@@ -156,21 +158,21 @@ export function get(id) {
 export function paginate() {
   return (dispatch, getState) => {
     dispatch({ type: Types.PAGINATE_REQUEST });
-    let page = getState().movie.paginate.page + 1;
+    const page = getState().movie.pagination.page + 1;
 
-    axios.get("/movies-page/" + page).then(
-      res => {
+    axios.get(`/movies-page/${page}`).then(
+      (res) => {
         dispatch({
           type: Types.PAGINATE_SUCCESS,
-          payload: res.data
+          payload: res.data,
         });
       },
-      err => {
+      (err) => {
         dispatch({
           type: Types.PAGINATE_FAILURE,
-          payload: (err.response && err.response.data.error) || "Server error"
+          payload: (err.response && err.response.data.error) || 'Server error',
         });
-      }
+      },
     );
   };
 }
@@ -179,29 +181,29 @@ export function paginate() {
  * Get all emails validate from this user
  */
 export function search(text) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: Types.SEARCH_REQUEST });
-    axios.get("/movies-search/" + text).then(
-      res => {
+    axios.get(`/movies-search/${text}`).then(
+      (res) => {
         // no results found
         if (!res.data.results.length) {
-          return dispatch({
+          dispatch({
             type: Types.SEARCH_FAILURE,
-            payload: "no movies found"
+            payload: 'no movies found',
+          });
+        } else {
+          dispatch({
+            type: Types.SEARCH_SUCCESS,
+            payload: res.data.results,
           });
         }
-
-        dispatch({
-          type: Types.SEARCH_SUCCESS,
-          payload: res.data.results
-        });
       },
-      err => {
+      (err) => {
         dispatch({
           type: Types.SEARCH_FAILURE,
-          payload: (err.response && err.response.data.error) || "Server error"
+          payload: (err.response && err.response.data.error) || 'Server error',
         });
-      }
+      },
     );
   };
 }
