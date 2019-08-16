@@ -1,26 +1,34 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/styles";
-import { Grid, Typography, CircularProgress } from "@material-ui/core";
-import debounce from "lodash.debounce";
-import { MovieCard } from "..";
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/styles';
+import { connect } from 'react-redux';
+import { Grid, Typography, CircularProgress } from '@material-ui/core';
+import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
 
-const styles = theme => ({
+import { compose } from 'recompose';
+import { MovieCard, LoadingGlobal } from '..';
+import { paginate } from '../../store/movie';
+import { movieType } from '../../types';
+
+const styles = {
   loadingWrap: {
-    width: "100%",
-    textAlign: "center",
-    paddingBottom: theme.spacing(2)
+    width: '100%',
+    textAlign: 'center',
+    paddingBottom: 16,
   },
   loadingText: {
-    fontSize: "17px",
-    marginRight: "7px"
+    fontSize: '17px',
+    marginRight: '7px',
   },
   loadingProgress: {
-    verticalAlign: "middle"
-  }
-});
+    verticalAlign: 'middle',
+  },
+};
 
 class MoviesList extends Component {
   componentDidMount() {
+    const { onPaginate } = this.props;
+    onPaginate();
     this.initInfiniteScroll();
   }
 
@@ -41,10 +49,15 @@ class MoviesList extends Component {
   }
 
   render() {
-    const { classes, list, loading } = this.props;
+    const { list, loading, classes } = this.props;
+
+    if (!list.length) {
+      return <LoadingGlobal />;
+    }
+
     return (
       <Grid container spacing={4} className={classes.cardGrid}>
-        {list.map(movie => (
+        {list.map((movie) => (
           <Grid item key={movie.id} xs={6} md={3} lg={2}>
             <MovieCard movie={movie} />
           </Grid>
@@ -54,11 +67,7 @@ class MoviesList extends Component {
             <Typography variant="caption" className={classes.loadingText}>
               loading movies
             </Typography>
-            <CircularProgress
-              size={33}
-              className={classes.loadingProgress}
-              color="secondary"
-            />
+            <CircularProgress size={33} className={classes.loadingProgress} color="secondary" />
           </div>
         )}
       </Grid>
@@ -66,4 +75,20 @@ class MoviesList extends Component {
   }
 }
 
-export default withStyles(styles)(MoviesList);
+MoviesList.propTypes = {
+  list: PropTypes.arrayOf(movieType).isRequired,
+  loading: PropTypes.bool.isRequired,
+  onPaginate: PropTypes.func.isRequired,
+  classes: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+const mapStateToProps = ({ movie }) => movie.pagination;
+
+const mapDispatchToProps = (dispatch) => ({
+  onPaginate: () => dispatch(paginate()),
+});
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
+)(MoviesList);
